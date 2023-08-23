@@ -92,7 +92,7 @@
 # Investigate Relational Database
 6. We want to understand more about the movies that families are watching. The following categories are considered family movies: Animation, Children, Classics, Comedy, Family and Music. **Create a query that lists each movie, the film category it is classified in, and the number of times it has been rented out.**
 
-For this query, you will need 5 tables: `Category`, `Film_Category`, `Inventory`, `Rental and Film`. Your solution should have three columns: Film title, Category name and Count of Rentals.
+    For this query, you will need 5 tables: `Category`, `Film_Category`, `Inventory`, `Rental and Film`. Your solution should have three columns: Film title, Category name and Count of Rentals.
 
     - The following table header provides a preview of what the resulting table should look like if you order by category name followed by the film title.
     - ***HINT**:* One way to solve this is to create a count of movies using aggregations, subqueries and Window functions.
