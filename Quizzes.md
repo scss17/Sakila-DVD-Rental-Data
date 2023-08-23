@@ -88,3 +88,53 @@
     FROM film_groups
     ORDER BY 2;
     ```
+
+# Investigate Relational Database
+6. We want to understand more about the movies that families are watching. The following categories are considered family movies: Animation, Children, Classics, Comedy, Family and Music. **Create a query that lists each movie, the film category it is classified in, and the number of times it has been rented out.**
+
+For this query, you will need 5 tables: `Category`, `Film_Category`, `Inventory`, `Rental and Film`. Your solution should have three columns: Film title, Category name and Count of Rentals.
+
+    - The following table header provides a preview of what the resulting table should look like if you order by category name followed by the film title.
+    - ***HINT**:* One way to solve this is to create a count of movies using aggregations, subqueries and Window functions.
+
+- **SOLUTION**
+
+    ```sql
+    WITH rented_films AS (
+    SELECT fi.title AS movie_title,
+        ca.name AS film_category
+    FROM category ca
+    INNER JOIN film_category fi_ca ON fi_ca.category_id = ca.category_id
+    INNER JOIN film fi ON fi.film_id = fi_ca.film_id
+    INNER JOIN inventory inv ON inv.film_id = fi.film_id
+    INNER JOIN rental re ON re.inventory_id = inv.inventory_id
+    WHERE ca.name IN ('Animation', 'Children', 'Classics', 'Comedy', 'Family', 'Music')
+    )
+
+    SELECT DISTINCT movie_title, film_category,
+        COUNT(film_category) AS rented_count
+    FROM rented_films
+    GROUP BY DISTINCT(movie_title, film_category)
+    ORDER BY rented_count DESC; 
+    ```
+
+It could also be interesting to get wich of these genres are the most popular
+- **SOLUTION**
+
+    ```sql
+    WITH rented_films AS (
+    SELECT fi.title AS movie_title,
+        ca.name AS film_category
+    FROM category ca
+    INNER JOIN film_category fi_ca ON fi_ca.category_id = ca.category_id
+    INNER JOIN film fi ON fi.film_id = fi_ca.film_id
+    INNER JOIN inventory inv ON inv.film_id = fi.film_id
+    INNER JOIN rental re ON re.inventory_id = inv.inventory_id
+    WHERE ca.name IN ('Animation', 'Children', 'Classics', 'Comedy', 'Family', 'Music')
+    )
+
+    SELECT DISTINCT(film_category),
+        COUNT(film_category) OVER (PARTITION BY film_category) AS count_category
+    FROM rented_films
+    ORDER BY 2 DESC;
+    ```
